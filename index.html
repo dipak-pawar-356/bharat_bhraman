@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home</title>
+
+  <!-- Bootstrap Link -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+  <!-- Google Web Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Inter:wght@700;800&display=swap&family=Roboto:wght@500&display=swap"
+    rel="stylesheet">
+
+  <!-- Icon Font Stylesheet -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- Libraries Stylesheet -->
+  <link href="lib/animate/animate.min.css" rel="stylesheet">
+  <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="weather/style.css">
+
+  <!-- jQuery -->
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <!-- ScrollReveal CDN -->
+  <script src="https://unpkg.com/scrollreveal"></script>
+
+
+</head>
+
+<body data-bs-spy="scroll" data-bs-target=".navbar" data-bs-offset="75">
+  <!-- Navbar Start -->
+  <nav style="background: transparent;" class="navbar navbar-expand-lg fixed-top" id="navbar">
+    <div class="container">
+      <a class="navbar-brand" href="index.html" id="logo"><img src="images/book-img.png"
+          alt="">&nbsp;<span>T</span>ravel</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
+        <span><i class="fa-solid fa-bars"></i></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mynavbar">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link active" href="#home">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#about-section">Mediator-place</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#services">Services</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#weather">Weather-app</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="bus_booking/bus123.html" target="_blank">Booking</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#gallery">Gallery</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="map/map/index.html" target="_blank">Map</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="tabs/index.html" target="_blank">Planner</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#safety">Guidlines</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="jarvis/index.html" target="_blank">Open-Jarvis</a>
+          </li>
+
+          <div id="authLinks">
+            <ul>
+              <li id="user-info"
+                style="width: 100%;; margin-left: 200px; margin-top: 25px;  display: flex; display: none;">
+                <span id="username"></span>
+                <a id="logout" href="#" style="display: none; text-decoration: none; ">Logout</a>
+              </li>
+              <li id="login-link">
+                <a id="login" href="login.html">Login</a>
+              </li>
+              <span id="register-link">
+                <li><a id="register" href="register.html">Register</a></li>
+              </span>
+            </ul>
+          </div>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+
+  <!-- Banner Section -->
+  <section id="home" class="banner_wrapper">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-6 text-center text-md-start">
+          <h5 style="color: white; margin-left: 120px;font-size: 20px; font-weight: 800;">Travel Through The World</h5>
+          <h1>With Us<br><span>Have A</span><br>Happy Journey</h1>
+          <a id="abt-btn" href="#about-section">Explore</a>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- about start -->
+
+  <section id="about-section">
+    <div class="container">
+
+
+      <div class="row">
+
+        <div class="main-txt ms-10 " style="margin-top: 50px;">
+          <h1><span>M</span>ediator</h1>
+
+        </div>
+
+
+        <div class="col-6" style="margin-top: 30px;">
+          <form id="bookingForm">
+            <input type="date" id="date" name="date" required>
+            <input type="text" id="start" placeholder="start location" name="start" required>
+            <input type="text" id="end" name="end" placeholder="end location" required>
+            <div class="about-btn">
+              <!-- <button id="submit" type="submit">Submit</button> -->
+              <button id="checkCities">Check city</button>
+            </div>
+          </form>
+
+        </div>
+        <div class="col-6">
+          <table id="citiesTable">
+            <thead>
+              <tr>
+                <th>Route</th>
+                <th>Estimated Cost</th>
+                <th>Middleware</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+              
+          </table>
+
+        </div>
+      </div>
+
+
+    </div>
+    </div>
+    </div>
+  </section>
+
+
+
+
+  <!-- Section Services Start -->
+  <section class="services" id="services">
+    <div class="container">
+
+
+      <div class="row">
+        <div class="main-txt">
+          <h1><span>S</span>ervices</h1>
+        </div>
+
+        <div class="col-md-4">
+
+          <div class="card c1">
+            <i class="fas fa-hotel"></i>
+            <div class="card-body">
+              <h3>Affordable Hotel</h3>
+              <p>Get Hotels at an Affordable Price</p>
+            </div>
+          </div>
+
+        </div>
+        <div class="col-md-4 ">
+
+          <div class="card c2">
+            <i class="fas fa-utensils"></i>
+            <div class="card-body">
+              <h3>Food & Drinks</h3>
+              <p>Enjoy food and drinks while u Travel</p>
+            </div>
+          </div>
+
+        </div>
+        <div class="col-md-4">
+
+          <div class="card c3">
+            <i class="fas fa-bullhorn"></i>
+            <div class="card-body">
+              <h3>Safty Guide</h3>
+              <p>Keep safety always the first Priority</p>
+            </div>
+          </div>
+
+        </div>
+
+
+
+      </div>
+
+
+      <div class="row" style="margin-top: 30px;">
+
+        <div class="col-md-4 ">
+
+          <div class="card c4">
+            <i class="fas fa-globe-asia"></i>
+            <div class="card-body">
+              <h3>Around The World</h3>
+              <p>Explore and Roam Around the world with us</p>
+            </div>
+          </div>
+
+        </div>
+        <div class="col-md-4 ">
+
+          <div class="card c5">
+            <i class="fas fa-plane"></i>
+            <div class="card-body">
+              <h3>Fastest Travel</h3>
+              <p>Get fastest travelling benefits with us</p>
+            </div>
+          </div>
+
+        </div>
+        <div class="col-md-4 ">
+
+          <div class="card c6">
+            <i class="fas fa-hiking"></i>
+            <div class="card-body">
+              <h3>Adventures</h3>
+              <p>Explore adventirous trips</p>
+            </div>
+          </div>
+
+        </div>
+
+
+
+      </div>
+
+    </div>
+  </section>
+  <!-- Section Services End -->
+
+  <!-- weather -->
+
+  <section id="weather">
+    <div class="container">
+      <div class="row">
+        
+        <div class="col-6 mx-auto">
+          <div class="custom-text">
+            <div class="main-txt" style="margin-top: 80px;">
+              <h1><span>W</span>eather</h1>
+            </div>
+            <h1>Welcome To Our Weather App</h1>
+            <p>Welcome To Our Weather App</h1> <p>Our Weather App delivers accurate and real-time weather information for any location. Whether you're planning your day or preparing for a trip, we provide up-to-date details on temperature, humidity, and more.</p> <p>Key features include real-time weather updates, detailed hourly and daily forecasts, and weather alerts to keep you informed about severe condition</p>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="card">
+            <div class="search">
+              <input type="text" placeholder="enter city name" spellcheck="false">
+              <button><img src="weather/images/search.png" alt=""></button>
+            </div>
+            <div class="weather">
+              <img src="weather/images/rain.png" class="weather-icon">
+              <h1 class="temp">22°C</h1>
+              <h2 class="city">New York</h2>
+              <div class="details">
+                <div class="col">
+                  <img src="weather/images/humidity.png">
+                  <div>
+                    <p class="humidity">50%</p>
+                    <p>Humidity</p>
+                  </div>
+                </div>
+                <div class="col">
+                  <img src="weather/images/wind.png">
+                  <div>
+                    <p class="wind">15 km/h</p>
+                    <p>Wind Speed</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+
+          </div>
+        </div>
+      </div>
+  </section>
+
+
+  <!-- Gallery Section -->
+
+  <section id="gallery">
+    <div class="container">
+      <div class="row">
+
+        <div class="main-txt" style="margin-top: 30px;">
+          <h1><span>G</span>allery</h1>
+        </div>
+
+        <div class="c1 gallery-card col-lg-4">
+          <img src="images/g1.png" alt="">
+        </div>
+        <div class="c2 gallery-card col-lg-4">
+          <img src="images/g2.png" alt="">
+        </div>
+        <div class="c3 gallery-card col-lg-4">
+          <img src="images/g3.png" alt="">
+        </div>
+        <div class="c4 gallery-card col-lg-4">
+          <img src="images/g4.png" alt="">
+        </div>
+        <div class="c5 gallery-card col-lg-4">
+          <img src="images/g5.png" alt="">
+        </div>
+        <div class="c6 gallery-card col-lg-4">
+          <img src="images/g6.png" alt="">
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+
+  <!-- safety start -->
+
+  <section id="safety">
+    <div class="container">
+      <div class="main-txt" style="margin-top: 170px;">
+        <h1><span>S</span>afety First</h1>
+      </div>
+
+      <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="sb1 nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home"
+            type="button" role="tab" aria-controls="pills-home" aria-selected="true">Aeroplane</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="sb2 nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile"
+            type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Trains</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="sb3 nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact"
+            type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Buses</button>
+        </li>
+      </ul>
+    </div>
+    <div class="safety-container">
+      <div class="tab-content" id="pills-tabContent">
+        <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+          <div class="container">
+            <div class="row">
+
+              <div class="safety-air-img col-6">
+                <img src="images/aeroplane.jpg" alt="">
+              </div>
+
+              <div class="col-6">
+
+                <p class="safety-txt ">When traveling by airplane, adhering to safety guidelines is crucial for a secure
+                  and comfortable journey. First and foremost, wearing a mask, such as a multilayer cloth mask, N95, or
+                  KN95, is essential both in the airport and on the plane to reduce the risk of airborne illnesses.
+                  Paying close attention to the flight attendants' safety briefing and reviewing the safety card will
+                  equip you with vital information for emergencies. Always keep your seat belt fastened while seated, as
+                  turbulence can occur unexpectedly, ensuring your safety. Hygiene is equally important, so wash your
+                  hands frequently and use disinfectant wipes to clean your tray table, armrests, and any surfaces you
+                  may touch. Limiting alcohol consumption during the flight is advisable, as alcohol can lead to
+                  dehydration and impaired judgment. Additionally, make sure not to store heavy objects in the overhead
+                  bins to prevent potential accidents. Wearing compression socks is recommended, especially during long
+                  flights, as they can help reduce the risk of deep vein thrombosis by promoting better blood
+                  circulation. Staying hydrated is also crucial in the dry cabin environment, so drink plenty of water
+                  throughout the flight. By following these comprehensive guidelines, you can significantly enhance your
+                  safety, comfort, and overall well-being during air travel, ensuring a smooth and pleasant journey from
+                  start to finish.
+
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+          <div class="container">
+            <div class="row">
+              <div class="safety-train col-6">
+                <img src="images/pexels-pixabay-72594.jpg" alt="">
+              </div>
+              <div class="safety-train col-6">
+
+                Once on the train, find your seat and store your luggage securely, either in the overhead racks or under
+                your seat. Keeping aisles clear is important for everyone's safety. Always wear a mask in crowded or
+                enclosed areas to protect yourself and others from airborne illnesses, especially during flu season or
+                in pandemics.
+
+                It's a good idea to stay hydrated during your journey, so bring a bottle of water with you. If the
+                journey is long, wearing comfortable clothing and compression socks can help reduce fatigue and improve
+                circulation, similar to air travel.
+
+                Familiarize yourself with the train's safety features, such as emergency exits and the location of fire
+                extinguishers. Pay attention to any announcements made by the train staff, as they often contain
+                important information regarding your journey.
+
+                Finally, when disembarking, wait for the train to come to a complete stop before getting up, and make
+                sure to collect all your belongings. By following these guidelines, you can enjoy a safe and comfortable
+                train journey.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+          <div class="container">
+            <div class="row">
+              <div class="col-6 safety-bus">
+                <img src="images/pexels-jonathanborba-2942172.jpg" alt="">
+              </div>
+              <div class="col-6">
+                <p>When traveling by bus, adhering to safety rules and guidelines ensures a smooth and secure journey.
+                  Always arrive at the bus stop early to avoid missing the bus. Wait in well-lit, safe areas away from
+                  traffic, and only board the bus when it comes to a complete stop. Ensure you have a valid ticket or
+                  pass before boarding, and follow any specific boarding instructions from the driver or staff. Once on
+                  the bus, choose a seat that allows easy access to the exit and avoid standing in aisles or near the
+                  driver. Always wear a seatbelt if available, and keep your belongings secure to prevent accidents. If
+                  traveling with children or special needs, ensure they are properly seated and supervised. Avoid
+                  engaging in disruptive behavior or consuming alcohol or drugs on the bus. Keep your personal items
+                  close and be cautious of pickpockets, especially in crowded areas. Inform the driver immediately if
+                  you notice any suspicious activity or feel unsafe. In case of emergencies, follow the driver’s
+                  instructions and exit the bus calmly and quickly. Finally, respect other passengers and maintain a
+                  considerate attitude throughout your journey. By following these guidelines, you contribute to a safer
+                  and more pleasant bus travel experience for everyone.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer Start -->
+  <div class="container-fluid bg-dark text-light footer pt-5 mt-5 wow fadeIn" data-wow-delay="0.1s">
+    <div class="container py-5">
+      <div class="row g-5">
+        <div class="col-lg-3 col-md-6">
+          <h4 class="text-white mb-3">Company</h4>
+          <a class="btn btn-link" href="">About Us</a>
+          <a class="btn btn-link" href="">Contact Us</a>
+          <a class="btn btn-link" href="">Privacy Policy</a>
+          <a class="btn btn-link" href="">Terms & Condition</a>
+          <a class="btn btn-link" href="">FAQs & Help</a>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <h4 class="text-white mb-3">Contact</h4>
+          <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>123 Street, New York, USA</p>
+          <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>+012 345 67890</p>
+          <p class="mb-2"><i class="fa fa-envelope me-3"></i>info@example.com</p>
+          <div class="d-flex pt-2">
+            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-twitter"></i></a>
+            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-facebook-f"></i></a>
+            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-youtube"></i></a>
+            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <h4 class="text-white mb-3">Gallery</h4>
+          <div class="row g-2 pt-2">
+            <div class="col-4">
+              <img class="img-fluid bg-light p-1" src="images/package-1.jpg" alt="">
+            </div>
+            <div class="col-4">
+              <img class="img-fluid bg-light p-1" src="images/package-2.jpg" alt="">
+            </div>
+            <div class="col-4">
+              <img class="img-fluid bg-light p-1" src="images/package-3.jpg" alt="">
+            </div>
+            <div class="col-4">
+              <img class="img-fluid bg-light p-1" src="images/package-2.jpg" alt="">
+            </div>
+            <div class="col-4">
+              <img class="img-fluid bg-light p-1" src="images/package-3.jpg" alt="">
+            </div>
+            <div class="col-4">
+              <img class="img-fluid bg-light p-1" src="images/package-1.jpg" alt="">
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <h4 class="text-white mb-3">Newsletter</h4>
+          <p>Dolor amet sit justo amet elitr clita ipsum elitr est.</p>
+          <div class="position-relative mx-auto" style="max-width: 400px;">
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="copyright">
+        <div class="row">
+          <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+            &copy; <a class="border-bottom" href="#">Travell through</a>, All Right Reserved.
+
+
+            Designed By <a class="border-bottom" href="#">Web Wizards</a>
+          </div>
+          <div class="col-md-6 text-center text-md-end">
+            <div class="footer-menu">
+              <a href="">Home</a>
+              <a href="">Cookies</a>
+              <a href="">Help</a>
+              <a href="">FQAs</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Footer End -->
+
+
+  <!-- Back to Top -->
+  <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <script>
+
+    ScrollReveal().reveal('.c1, .c2, .c3, .c4, .c5, .c6', {
+      delay: 300,
+      reset: true,
+      distance: '20px',
+      duration: 300,
+      easing: 'ease-in-out',
+      origin: 'bottom',
+      interval: 200,
+      viewFactor: 0.2
+    });
+    ScrollReveal().reveal(' form, input', {
+      delay: 300,
+      reset: true,
+      distance: '20px',
+      duration: 300,
+      easing: 'ease-in',
+      origin: 'left',
+      interval: 200,
+      viewFactor: 0.5
+    });
+    ScrollReveal().reveal(' table, th,tr,tbody', {
+      delay: 300,
+      reset: true,
+      distance: '20px',
+      duration: 300,
+      easing: 'ease-in',
+      origin: 'right',
+      interval: 200,
+      viewFactor: 0.5
+    });
+    ScrollReveal().reveal(' .custom-text', {
+      delay: 300,
+      reset: true,
+      distance: '20px',
+      duration: 300,
+      easing: 'ease-in',
+      origin: 'left',
+      interval: 200,
+      viewFactor: 0.5
+    });
+    ScrollReveal().reveal('#weather .container .card', {
+      delay: 300,
+      reset: true,
+      distance: '20px',
+      duration: 300,
+      easing: 'ease-in',
+      origin: 'right',
+      interval: 200,
+      viewFactor: 0.5
+    });
+    ScrollReveal().reveal('.main-txt h1,.main-txt h1 span ', {
+      delay: 300,
+      reset: true,
+      distance: '20px',
+      duration: 300,
+      easing: 'ease-in',
+      origin: 'left',
+      interval: 200,
+      viewFactor: 0.5
+    });
+    ScrollReveal().reveal('.main-txt h1', {
+      delay: 300,
+      reset: true,
+      distance: '20px',
+      duration: 300,
+      easing: 'ease-in',
+      origin: 'left',
+      interval: 200,
+      viewFactor: 0.5
+    });
+    ScrollReveal().reveal('.main-txt h1 span ', {
+      delay: 300,
+      reset: true,
+      distance: '20px',
+      duration: 300,
+      easing: 'ease-in',
+      origin: 'left',
+      interval: 200,
+      viewFactor: 0
+    });
+    ScrollReveal().reveal('.sb1,.sb2, .sb3 ', {
+      delay: 300,
+      reset: true,
+      distance: '20px',
+      duration: 300,
+      easing: 'ease-in',
+      origin: 'bottom',
+      interval: 200,
+      viewFactor: 0
+    });
+    ScrollReveal().reveal('.safety-container, .safety-txt, safety-img img ', {
+      delay: 300,
+      reset: true,
+      distance: '80px',
+      duration: 300,
+      easing: 'ease-in',
+      origin: 'bottom',
+      interval: 200,
+      viewFactor: 0
+    });
+
+
+
+
+  </script>
+
+
+
+
+  <!-- bootstrap cdn js links -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
+  <!-- JavaScript Libraries -->
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="lib/wow/wow.min.js"></script>
+  <script src="lib/easing/easing.min.js"></script>
+  <script src="lib/waypoints/waypoints.min.js"></script>
+  <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+
+
+  <script src="weather/script.js"></script>
+
+  <script src="script.js"></script>
+
+
+</body>
+
+</html>
