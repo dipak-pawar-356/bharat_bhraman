@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Route Finder</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .container-fluid {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            overflow-y: auto;
+            padding-top: 20px;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            width: 80%;
+            max-width: 1200px;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .input-section {
+            flex: 1;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+        }
+
+        .output-section {
+            flex: 2;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+            width: 100%;
+        }
+
+        .output-visible .output-section {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .output-visible .input-section {
+            transform: translateY(-10%);
+        }
+
+        .table-responsive {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            .output-visible .input-section {
+                transform: translateY(0);
+            }
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .btn:hover {
+            transform: scale(1.1);
+        }
+
+        .best-route {
+            background-color: #f8d7da;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            font-weight: bolder;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="main-content" id="mainContent">
+            <div class="input-section">
+                <h2 class="text-center text-success">Route Finder</h2>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Start Location</label>
+                    <input type="text" id="startLocation" class="form-control" placeholder="Enter start location" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">End Location</label>
+                    <input type="text" id="endLocation" class="form-control" placeholder="Enter end location" />
+                </div>
+                <button class="btn btn-custom" style="background-color: rgb(2, 136, 2); color: white; font-weight: bolder;" onclick="getRoutes()">Find Routes</button>
+                <div class="loading mt-3">
+                    <div class="spinner-border text-success" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-2">Finding the best routes...</p>
+                </div>
+            </div>
+
+            <div class="output-section" id="outputSection">
+                <div id="output"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_KEY = "AIzaSyC0lQF8K1oRAWZ76mBgk4pUdeTWPz8Onok";
+        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`;
+
+        async function getRoutes() {
+            const start = document.getElementById("startLocation").value.trim();
+            const end = document.getElementById("endLocation").value.trim();
+            const outputDiv = document.getElementById("output");
+            const loadingDiv = document.querySelector(".loading");
+            const mainContent = document.getElementById("mainContent");
+
+            if (!start || !end) {
+                outputDiv.innerHTML = `<div class="alert alert-danger">Please enter both start and end locations.</div>`;
+                return;
+            }
+
+            outputDiv.innerHTML = "";
+            loadingDiv.style.display = "block";
+
+            const promptText = `
+                Find 5 possible routes from ${start} to ${end}.
+                Provide details like distance, cost, travel time, transport methods, weather, food stops, and booking options.
+                Include major cities on each route.
+                Respond in JSON format only.
+
+                Example:
+                {
+                    "routes": [
+                        {
+                            "route": "Via NH48",
+                            "distance": "94 km",
+                            "cost": "Approx. INR 1200-1800",
+                            "time": "2 hours 30 minutes",
+                            "transport_methods": ["Car", "Bus"],
+                            "weather": "Sunny, 28°C",
+                            "restaurants": ["McDonald's", "Subway"],
+                            "booking_options": ["Bus tickets available on RedBus"],
+                            "major_cities": ["City1", "City2", "City3"]
+                        }
+                    ],
+                    "best_route": {
+                        "route": "Via NH48",
+                        "distance": "94 km",
+                        "cost": "Approx. INR 1200-1800",
+                        "time": "2 hours 30 minutes",
+                        "transport_methods": ["Car", "Bus"],
+                        "weather": "Sunny, 28°C",
+                        "restaurants": ["McDonald's", "Subway"],
+                        "booking_options": ["Bus tickets available on RedBus"]
+                    }
+                }
+            `;
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ contents: [{ role: "user", parts: [{ text: promptText }] }] }),
+                });
+
+                const data = await response.json();
+                let rawResponse = data?.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
+                rawResponse = rawResponse.replace(/^```json\n/, "").replace(/\n```$/, "");
+
+                const parsedData = JSON.parse(rawResponse.trim());
+
+                let tableHTML = `<div class="table-responsive">
+                    <table class="table table-bordered table-hover mt-3">
+                        <thead class="table-success">
+                            <tr>
+                                <th>Route</th>
+                                <th>Distance</th>
+                                <th>Estimated Cost</th>
+                                <th>Travel Time</th>
+                                <th>Transport Methods</th>
+                                <th>Weather</th>
+                                <th>Restaurants</th>
+                                <th>Booking Options</th>
+                                <th>Major Cities</th>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+
+                parsedData.routes.forEach(route => {
+                    tableHTML += `
+                        <tr>
+                            <td>${route.route}</td>
+                            <td>${route.distance}</td>
+                            <td>${route.cost}</td>
+                            <td>${route.time}</td>
+                            <td>${route.transport_methods.join(", ")}</td>
+                            <td>${route.weather}</td>
+                            <td>${route.restaurants.join(", ")}</td>
+                            <td>${route.booking_options.join(", ")}</td>
+                            <td>${route.major_cities?.join(", ") || "N/A"}</td>
+                        </tr>`;
+                });
+
+                tableHTML += `</tbody></table></div>`;
+                loadingDiv.style.display = "none";
+                outputDiv.innerHTML = tableHTML;
+                mainContent.classList.add("output-visible");
+            } catch (error) {
+                loadingDiv.style.display = "none";
+                outputDiv.innerHTML = `<div class="alert alert-danger">Error fetching routes.</div>`;
+            }
+        }
+    </script>
+</body>
+</html>

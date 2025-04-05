@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Route Finder</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        background-color: #f8f9fa;
+      }
+
+      .container-fluid {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start; /* Align to the top instead of center */
+        min-height: 100vh; /* Allow the page to grow instead of forcing a fixed height */
+        overflow-y: auto; /* Enable scrolling if content overflows */
+        padding-top: 20px; /* Add padding to prevent content from sticking to the top */
+      }
+
+      .main-content {
+        display: flex;
+        flex-direction: column;
+        width: 80%;
+        max-width: 1200px;
+        transition: transform 0.5s ease-in-out;
+      }
+
+      /* Ensure input and output sections are stacked correctly */
+      .input-section {
+        flex: 1;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+      }
+
+      /* Ensure output section stays visible below input */
+      .output-section {
+        flex: 2;
+        opacity: 0;
+        transform: translateY(30px);
+        transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+        width: 100%;
+      }
+
+      .output-visible .output-section {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* Prevent input from shifting too much */
+      .output-visible .input-section {
+        transform: translateY(-10%);
+      }
+
+      /* Make sure tables are scrollable */
+      .table-responsive {
+        max-height: 400px; /* Limit height to avoid overflow */
+        overflow-y: auto;
+      }
+
+      @media (max-width: 768px) {
+        .main-content {
+          flex-direction: column;
+        }
+        .output-visible .input-section {
+          transform: translateY(0);
+        }
+      }
+
+      .loading {
+        display: none;
+        text-align: center;
+      }
+      .btn {
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: transform 0.2s ease-in-out;
+      }
+      .btn:hover {
+        transform: scale(1.1);
+      }
+      .table-responsive {
+        font-weight: bolder;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .best-route {
+        background-color: #f8d7da;
+        padding: 10px;
+        border-radius: 5px;
+        margin-top: 20px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        font-weight: bolder;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="main-content" id="mainContent">
+        <div class="input-section">
+          <h2 class="text-center text-success">Route Finder</h2>
+          <div class="mb-3">
+            <label class="form-label fw-bold">Start Location</label>
+            <input
+              type="text"
+              id="startLocation"
+              class="form-control"
+              placeholder="Enter start location"
+            />
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-bold">End Location</label>
+            <input
+              type="text"
+              id="endLocation"
+              class="form-control"
+              placeholder="Enter end location"
+            />
+          </div>
+          <button
+            style="
+              background-color: rgb(2, 136, 2);
+              color: white;
+              font-weight: bolder;
+            "
+            class="btn btn-custom"
+            onclick="getRoutes()"
+          >
+            Find Routes
+          </button>
+          <div class="loading mt-3">
+            <div class="spinner-border text-success" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2">Finding the best routes...</p>
+          </div>
+        </div>
+
+        <div class="output-section" id="outputSection">
+          <div id="output"></div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+      const API_KEY = "AIzaSyBk--3KZwAf4htWawgXkdNbirgB3ziclic"; 
+      const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`;
+
+      async function getRoutes() {
+        const start = document.getElementById("startLocation").value.trim();
+        const end = document.getElementById("endLocation").value.trim();
+        const outputDiv = document.getElementById("output");
+        const loadingDiv = document.querySelector(".loading");
+        const mainContent = document.getElementById("mainContent");
+
+        if (!start || !end) {
+          outputDiv.innerHTML = `<div class="alert alert-danger">Please enter both start and end locations.</div>`;
+          return;
+        }
+
+        outputDiv.innerHTML = "";
+        loadingDiv.style.display = "block"; 
+
+        const promptText = `
+                Find 5 possible routes from ${start} to ${end}.
+                Provide clear, detailed names (e.g., "Via NH48 through Pune - Mumbai Expressway").
+                Include the following details for each route:
+                - Distance
+                - Estimated cost (including tolls)
+                - Estimated travel time
+                - Available transport methods (e.g., flights, trains, buses)
+                - Weather information along the route
+                - Available restaurants or food stops
+                - Booking options (e.g., flight tickets, train tickets, bus tickets)
+                Respond ONLY in valid JSON format (no markdown, no extra text).
+                Example:
+                {
+                    "routes": [
+                        {
+                            "route": "Via NH48 through Pune - Mumbai Expressway",
+                            "distance": "94 km",
+                            "cost": "Approx. INR 1200-1800 (toll included)",
+                            "time": "2 hours 30 minutes",
+                            "transport_methods": ["Car", "Bus"],
+                            "weather": "Sunny, 28°C",
+                            "restaurants": ["McDonald's", "Subway"],
+                            "booking_options": ["Bus tickets available on RedBus"]
+                        }
+                    ],
+                    "best_route": {
+                        "route": "Via NH48 through Pune - Mumbai Expressway",
+                        "distance": "94 km",
+                        "cost": "Approx. INR 1200-1800 (toll included)",
+                        "time": "2 hours 30 minutes",
+                        "transport_methods": ["Car", "Bus"],
+                        "weather": "Sunny, 28°C",
+                        "restaurants": ["McDonald's", "Subway"],
+                        "booking_options": ["Bus tickets available on RedBus"]
+                    }
+                    "major cities on the route": {
+                      "route":via NH 965 and NH 65
+                      degaon,tungat,mohol,lamboti,kondi,bale
+                      }
+                }
+            `;
+
+        try {
+          const response = await fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              contents: [{ role: "user", parts: [{ text: promptText }] }],
+            }),
+          });
+
+          const data = await response.json();
+          let rawResponse =
+            data?.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
+
+          rawResponse = rawResponse
+            .replace(/^```json\n/, "")
+            .replace(/\n```$/, "");
+
+          try {
+            const parsedData = JSON.parse(rawResponse.trim());
+
+            let tableHTML = `
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover mt-3">
+                                <thead class="table-success">
+                                    <tr>
+                                        <th>Route</th>
+                                        <th>Distance</th>
+                                        <th>Estimated Cost</th>
+                                        <th>Travel Time</th>
+                                        <th>Transport Methods</th>
+                                        <th>Weather</th>
+                                        <th>Restaurants</th>
+                                        <th>Booking Options</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                    `;
+
+            parsedData.routes.forEach((route) => {
+              tableHTML += `
+                            <tr>
+                                <td>${route.route}</td>
+                                <td>${route.distance}</td>
+                                <td>${route.cost}</td>
+                                <td>${route.time}</td>
+                                <td>${route.transport_methods.join(", ")}</td>
+                                <td>${route.weather}</td>
+                                <td>${route.restaurants.join(", ")}</td>
+                                <td>${route.booking_options.join(", ")}</td>
+                            </tr>
+                        `;
+            });
+
+            tableHTML += `</tbody></table></div>`;
+
+            tableHTML += `
+                        <div class="best-route mt-3">
+                            <h5 class="text-danger">🚀 Best Recommended Route:</h5>
+                            <p><strong>🛣️ ${
+                              parsedData.best_route.route
+                            }</strong></p>
+                            <p>📏 Distance: ${
+                              parsedData.best_route.distance
+                            }</p>
+                            <p>💰 Cost: ${parsedData.best_route.cost}</p>
+                            <p>⏱️ Travel Time: ${parsedData.best_route.time}</p>
+                            <p>🚗 Transport Methods: ${parsedData.best_route.transport_methods.join(
+                              ", "
+                            )}</p>
+                            <p>🌤️ Weather: ${parsedData.best_route.weather}</p>
+                            <p>🍴 Restaurants: ${parsedData.best_route.restaurants.join(
+                              ", "
+                            )}</p>
+                            <p>🎟️ Booking Options: ${parsedData.best_route.booking_options.join(
+                              ", "
+                            )}</p>
+                        </div>
+                    `;
+
+            loadingDiv.style.display = "none"; // Hide loader once data is ready
+            outputDiv.innerHTML = tableHTML;
+
+            // Add animation effect
+            mainContent.classList.add("output-visible");
+          } catch (parseError) {
+            loadingDiv.style.display = "none";
+            outputDiv.innerHTML = `<div class="alert alert-danger">Error parsing API response. Please try again.</div>`;
+          }
+        } catch (error) {
+          loadingDiv.style.display = "none"; // Hide loader on error
+          outputDiv.innerHTML = `<div class="alert alert-danger">Error fetching routes. Please check your API key or try again later.</div>`;
+        }
+      }
+    </script>
+  </body>
+</html>
